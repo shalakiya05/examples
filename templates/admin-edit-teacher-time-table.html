@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Portal</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script defer src="\static\admin.js"></script>
+    <script defer src="\static\index.js"></script>
+    <link rel="stylesheet" href="\static\login-page.css">
+    <link rel="icon" href="\static\filename.jpg" type="image/gif" sizes="16x16">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<script>
+    async function getAll() {
+        let response = await fetch("/teacher-time-table/getAll",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/xxx-form"
+                },
+            }
+        );
+        let data = await response.json();
+        return data;
+    }
+
+    const data = getAll()
+        .then((data) => {
+            var dataObject = ObjectToArray(data);
+            main(dataObject);
+        })
+        .then(() => {
+
+        })
+        .catch((err) => {
+            alert("error")
+        });
+
+
+    function main(dataArray){
+        var admin_id = localStorage.getItem('admin-id')
+        var container1 = "";
+        container1 = document.getElementById('match_a')
+        var school = localStorage.getItem('schoolname')
+        var teacher_id = localStorage.getItem('regId')
+        dataArray.forEach(element => {
+            if(element["user"]==admin_id && element["regId"]== teacher_id && element['schoolname']==school){
+                container1.innerHTML += '<h5 class="text-center pb-3 display-5">Edit - Teacher Time Table</h5>'+
+                        '<div class="row">'+
+                            '<div class="col-sm-2"><label style="font-weight:bold;">Details</label></div>'+
+                            '<div class="col-sm-1"><label style="font-weight:bold;">Teacher ID</label></div>'+
+                            '<div class="col-sm-4"><label>'+element["regId"]+'</label></div>'+
+                            '<div class="col-sm-5"></div>'+
+                        '</div>'+'<br>'+
+                        
+
+                        '<div class="row">'+
+                            '<div class="col-sm-2"><label style="font-weight: bold;">Timings</label></div>'+
+                            '<div class="col-sm-1"><label style="font-weight: bold;">I - </label></div>'+ 
+                            '<div class="col-sm-2"><input type="time" class="form-control" id="time1" value="'+element["timings"][1].split(' -')[0]+'" placeholder="Mon - I"></div>'+
+                            '<div class="col-sm-2"><input type="time" class="form-control" id="time2" value="'+element["timings"][1].split('- ')[1]+'" placeholder="Mon - II"></div>'+
+                            '<div class="col-sm-1"><label style="font-weight: bold;">II - </label></div>'+
+                            '<div class="col-sm-2"><input type="time" class="form-control" id="time3" value="'+element["timings"][2].split(' -')[0]+'" placeholder="Mon - III"></div>'+
+                            '<div class="col-sm-2"><input type="time" class="form-control" id="time4" value="'+element["timings"][2].split('- ')[1]+'" placeholder="Mon - IV"></div>'+
+                        '</div><br>'+
+                        
+                        '<div class="row">'+
+                            '<div class="col-sm-2"></div>'+ 
+                            '<div class="col-sm-1"><label style="font-weight: bold;">III - </label></div> '+
+                            '<div class="col-sm-2"><input type="time" class="form-control" id="time5" value="'+element["timings"][3].split(' -')[0]+'" placeholder="Mon - V"></div>'+
+                            '<div class="col-sm-2"><input type="time" class="form-control" id="time6" value="'+element["timings"][3].split('- ')[1]+'" placeholder="Mon - VI"></div>'+
+                            '<div class="col-sm-1"><label style="font-weight: bold;">IV - </label></div>'+
+                            '<div class="col-sm-2"><input type="time" class="form-control" id="time7" value="'+element["timings"][4].split(' -')[0]+'" placeholder="Mon - VII"></div>'+
+                            '<div class="col-sm-2"><input type="time" class="form-control" id="time8" value="'+element["timings"][4].split('- ')[1]+'" placeholder="Mon - VIII"></div>'+
+                        '</div><br>'+
+                        
+                        '<div class="row">'+
+                            '<div class="col-sm-2"></div>'+
+                            '<div class="col-sm-1"><label style="font-weight: bold;">V - </label></div>'+ 
+                            '<div class="col-sm-2"><input type="time" class="form-control" id="time9" value="'+element["timings"][5].split(' -')[0]+'" placeholder="Mon - I"></div>'+
+                            '<div class="col-sm-2"><input type="time" class="form-control" id="time10" value="'+element["timings"][5].split('- ')[1]+'" placeholder="Mon - II"></div>'+
+                            '<div class="col-sm-1"><label style="font-weight: bold;">VI - </label></div>'+
+                            '<div class="col-sm-2"><input type="time" class="form-control" id="time11" value="'+element["timings"][6].split(' -')[0]+'" placeholder="Mon - III"></div>'+
+                            '<div class="col-sm-2"><input type="time" class="form-control" id="time12" value="'+element["timings"][6].split('- ')[1]+'" placeholder="Mon - IV"></div>'+
+                        '</div><br>'+
+
+                        '<div class="row">'+
+                            '<div class="col-sm-2"></div>'+ 
+                            '<div class="col-sm-1"><label style="font-weight: bold;">VII - </label></div>'+ 
+                            '<div class="col-sm-2"><input type="time" class="form-control" id="time13" value="'+element["timings"][7].split(' -')[0]+'" placeholder="Mon - V"></div>'+
+                            '<div class="col-sm-2"><input type="time" class="form-control" id="time14" value="'+element["timings"][7].split('- ')[1]+'" placeholder="Mon - VI"></div>'+
+                            '<div class="col-sm-1"><label style="font-weight: bold;">VIII - </label></div>'+
+                            '<div class="col-sm-2"><input type="time" class="form-control" id="time15" value="'+element["timings"][8].split(' -')[0]+'" placeholder="Mon - VII"></div>'+
+                            '<div class="col-sm-2"><input type="time" class="form-control" id="time16" value="'+element["timings"][8].split('- ')[1]+'" placeholder="Mon - VIII"></div>'+
+                        '</div><br><br>'+
+
+                        '<h5 class="text-center pb-3 display-5">Classes</h5><br>'+
+
+                        
+                        '<div class="row">'+
+                            '<div class="col-sm-2"><label style="font-weight: bold;">Monday</label></div>'+ 
+                            '<div class="col-sm-1"><label style="font-weight: bold;">FN</label></div>'+ 
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][1]["classes"][1]+'" id="mon1" placeholder="Mon - I"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][1]["classes"][2]+'" id="mon2" placeholder="Mon - II"></div>'+
+                            '<div class="col-sm-1"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][1]["classes"][3]+'" id="mon3" placeholder="Mon - III"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][1]["classes"][4]+'" id="mon4" placeholder="Mon - IV"></div>'+
+                        '</div><br>'+
+                            
+                        '<div class="row">'+
+                            '<div class="col-sm-2"></div>'+ 
+                            '<div class="col-sm-1"><label style="font-weight: bold;">AN</label></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][1]["classes"][5]+'" id="mon5" placeholder="Mon - V"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][1]["classes"][6]+'" id="mon6" placeholder="Mon - VI"></div>'+
+                            '<div class="col-sm-1"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][1]["classes"][7]+'" id="mon7" placeholder="Mon - VII"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][1]["classes"][8]+'" id="mon8" placeholder="Mon - VIII"></div>'+
+                        '</div><br><br>'+
+
+                        
+                        '<div class="row">'+
+                            '<div class="col-sm-2"><label style="font-weight: bold;">Tuesday</label></div>'+ 
+                            '<div class="col-sm-1"><label style="font-weight: bold;">FN</label></div>'+ 
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][2]["classes"][1]+'" id="tue1" placeholder="Tue - I"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][2]["classes"][2]+'" id="tue2" placeholder="Tue - II"></div>'+
+                            '<div class="col-sm-1"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][2]["classes"][3]+'" id="tue3" placeholder="Tue - III"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][2]["classes"][4]+'" id="tue4" placeholder="Tue - IV"></div>'+
+                        '</div><br>'+
+                            
+                        '<div class="row">'+
+                            '<div class="col-sm-2"></div>'+ 
+                            '<div class="col-sm-1"><label style="font-weight: bold;">AN</label></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][2]["classes"][5]+'" id="tue5" placeholder="Tue - V"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][2]["classes"][6]+'" id="tue6" placeholder="Tue - VI"></div>'+
+                            '<div class="col-sm-1"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][2]["classes"][7]+'" id="tue7" placeholder="Tue - VII"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][2]["classes"][8]+'" id="tue8" placeholder="Tue - VIII"></div>'+
+                        '</div><br><br>'+
+
+                        
+                        '<div class="row">'+
+                            '<div class="col-sm-2"><label style="font-weight: bold;">Wednesday</label></div>'+ 
+                            '<div class="col-sm-1"><label style="font-weight: bold;">FN</label></div>'+ 
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][3]["classes"][1]+'" id="wed1" placeholder="Wed - I"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][3]["classes"][2]+'" id="wed2" placeholder="Wed - II"></div>'+
+                            '<div class="col-sm-1"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][3]["classes"][3]+'" id="wed3" placeholder="Wed - III"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][3]["classes"][4]+'" id="wed4" placeholder="Wed - IV"></div>'+
+                        '</div><br>'+
+                            
+                        '<div class="row">'+
+                            '<div class="col-sm-2"></div>'+ 
+                            '<div class="col-sm-1"><label style="font-weight: bold;">AN</label></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][3]["classes"][5]+'" id="wed5" placeholder="Wed - V"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][3]["classes"][6]+'" id="wed6" placeholder="Wed - VI"></div>'+
+                            '<div class="col-sm-1"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][3]["classes"][7]+'" id="wed7" placeholder="Wed - VII"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][3]["classes"][8]+'" id="wed8" placeholder="Wed - VIII"></div>'+
+                        '</div><br><br>'+
+
+                          
+                        '<div class="row">'+
+                            '<div class="col-sm-2"><label style="font-weight: bold;">Thursday</label></div>'+ 
+                            '<div class="col-sm-1"><label style="font-weight: bold;">FN</label></div>'+ 
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][4]["classes"][1]+'" id="thur1" placeholder="Thur - I"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][4]["classes"][2]+'" id="thur2" placeholder="Thur - II"></div>'+
+                            '<div class="col-sm-1"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][4]["classes"][3]+'" id="thur3" placeholder="Thur - III"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][4]["classes"][4]+'" id="thur4" placeholder="Thur - IV"></div>'+
+                        '</div><br>'+
+                            
+                        '<div class="row">'+
+                            '<div class="col-sm-2"></div>'+ 
+                            '<div class="col-sm-1"><label style="font-weight: bold;">AN</label></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][4]["classes"][5]+'" id="thur5" placeholder="Thur - V"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][4]["classes"][6]+'" id="thur6" placeholder="Thur - VI"></div>'+
+                            '<div class="col-sm-1"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][4]["classes"][7]+'" id="thur7" placeholder="Thur - VII"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][4]["classes"][8]+'" id="thur8" placeholder="Thur - VIII"></div>'+
+                        '</div><br><br>'+
+
+                        '<div class="row">'+
+                            '<div class="col-sm-2"><label style="font-weight: bold;">Friday</label></div>'+ 
+                            '<div class="col-sm-1"><label style="font-weight: bold;">FN</label></div>'+ 
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][5]["classes"][1]+'" id="fri1" placeholder="Fri - I"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][5]["classes"][2]+'" id="fri2" placeholder="Fri - II"></div>'+
+                            '<div class="col-sm-1"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][5]["classes"][3]+'" id="fri3" placeholder="Fri - III"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][5]["classes"][4]+'" id="fri4" placeholder="Fri - IV"></div>'+
+                        '</div><br>'+
+                            
+                        '<div class="row">'+
+                            '<div class="col-sm-2"></div>'+ 
+                            '<div class="col-sm-1"><label style="font-weight: bold;">AN</label></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][5]["classes"][5]+'" id="fri5" placeholder="Fri - V"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][5]["classes"][6]+'" id="fri6" placeholder="Fri - VI"></div>'+
+                            '<div class="col-sm-1"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][5]["classes"][7]+'" id="fri7" placeholder="Fri - VII"></div>'+
+                            '<div class="col-sm-2"><input type="text" class="form-control" value="'+element["time-table"][5]["classes"][8]+'" id="fri8" placeholder="Fri - VIII"></div>'+
+                        '</div><br><br>';
+
+            }
+        });
+        return;
+    }
+    var match_count = 0;
+
+    function match_getvalues() {
+        var mon_time_table  = [];
+        var tue_time_table  = [];
+        var wed_time_table  = [];
+        var thur_time_table  = [];
+        var fri_time_table  = [];
+        var timing_time_table  = [];
+        var time_table_obj = {};
+        for (i = 1; i <= 8; i++) {
+            mon_time_table.push(document.getElementById("mon" + i).value);
+            tue_time_table.push(document.getElementById("tue" + i).value);
+            wed_time_table.push(document.getElementById("wed" + i).value);
+            thur_time_table.push(document.getElementById("thur" + i).value);
+            fri_time_table.push(document.getElementById("fri" + i).value);
+        }
+
+        for (i = 1; i <= 16; i=i+2) {
+            timing_time_table.push(document.getElementById("time" + i).value +" - "+ document.getElementById("time" + (i+1)).value);
+        }
+
+        time_table_obj["1"] = {
+            "day":"monday",
+            "classes":toObject(mon_time_table),
+        }
+
+        time_table_obj["2"] = {
+            "day":"tuesday",
+            "classes":toObject(tue_time_table),
+        }
+        time_table_obj["3"] = {
+            "day":"wednesday",
+            "classes":toObject(wed_time_table),
+        }
+        time_table_obj["4"] = {
+            "day":"thursday",
+            "classes":toObject(thur_time_table),
+        }
+        time_table_obj["5"] = {
+            "day":"friday",
+            "classes":toObject(fri_time_table),
+        }
+
+        if(count(timing_time_table)==8 && count(mon_time_table)==8 && count(tue_time_table)==8  && count(wed_time_table)==8 && count(thur_time_table)==8 && count(fri_time_table)==8){
+            var schoolname = localStorage.getItem("schoolname");
+            var user_id = localStorage.getItem("regId");
+            var admin_id = localStorage.getItem("admin-id");
+            var match_ques_obj = {};
+            match_ques_obj = {
+                "user": admin_id,
+                "regId":user_id,
+                "schoolname":schoolname,
+                "timings":toObject(timing_time_table),
+                "time-table":time_table_obj
+            }
+            create_teacher_time_table(JSON.stringify(match_ques_obj,null,'\t'));
+            console.log(JSON.stringify(match_ques_obj, null, '\t'))
+            }
+            else{
+                alert("Please enter all the fields");
+            }
+    }
+
+    function close_page(){
+        window.location.replace('/admin/view-teacher-time-table')
+    }
+
+</script>
+
+<body>
+    <div id="includedContent"></div>
+    <div class="container-fluid">
+        <!-- Section Content -->
+        <div class="p-3 m-3">
+            <div class="p-3 m-3">
+                <div class="container">
+                    <form>
+                        <div id="match_a"></div>
+                        <div class="row">
+                            <div class="col-sm-10"></div>
+                            <div class="col-sm-1"><input style="height:40px;" type='button' value='Save'
+                                    class="btn btn-primary mr-3" onclick="match_getvalues();" id='match_getvalue'>
+                            </div>
+                            <div class="col-sm-1"><input style="height:40px;" type='button' value='Close'
+                                class="btn btn-danger mr-3" onclick="close_page();" >
+                            </div>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+
+</html>

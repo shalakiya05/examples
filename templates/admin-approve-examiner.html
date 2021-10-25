@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Portal</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script defer src="\static\admin.js"></script>
+    <script defer src="\static\index.js"></script>
+    <link rel="stylesheet" href="\static\login-page.css">
+    <link rel="icon" href="\static\filename.jpg" type="image/gif" sizes="16x16"></head>
+<script>
+
+    async function getAll() {
+        let response = await fetch("/examiner/admin-approval",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/xxx-form"
+                }
+            }
+        );
+
+        let data = await response.json();
+
+        return data;
+    }
+
+    const data = getAll()
+        .then((data) => {
+            var dataObject = ObjectToArray(data);
+            main(dataObject);
+        })
+        .then(() => {
+
+        })
+        .catch((err) => {
+            alert("error")
+        });
+
+
+
+    function ObjectToArray(obj) {
+        var arr = [];
+        for (key in obj) {
+            arr.push(obj[key]);
+        }
+        return arr
+    }
+
+    function main(dataArray) {
+        let table3 = document.getElementById('data-table1');
+        console.log(dataArray);
+        let tabledata3 = "";
+
+        tabledata3 += `<thead class="thead-light">
+                                            <tr>
+                                            <th>Name</th>
+                                            <th>Register Number</th>
+                                            <th>Role</th>
+                                            <th>Approval</th>
+                                            </tr>
+                                        </thead>`;
+        dataArray.forEach(element => {
+
+            var schoolname = localStorage.getItem('schoolname');
+            if (element["schoolname"] == schoolname) {
+                tabledata3 += '<tbody>';
+                tabledata3 += '<tr>';
+                tabledata3 += '<th scope="row">' + (element["name"]) + '</td>';
+                tabledata3 += '<td>' + (element["examiner_id"]) + '</td>';
+                tabledata3 += '<td>Examiner</td>';
+                // tabledata3 += '<td>' + '-' + '</td>';
+                // tabledata3 += '<td>' + (element["section"]) + '</td>';
+                tabledata3 += '<td><button style="width:90px;" class="form-control btn btn-primary" onclick="approveExaminer(\'' + element["examiner_id"] + '\')" value="Approve">Approve</button></td>';
+
+                // tabledata3 += '<td><input style="width:120px;" type="button" class="form-control btn btn-cancel" onclick="cancelStudent(' + element["regno"] + ')" id="cancelBtn' + element["regno"] + ')" value="View profile"></td>';
+
+                tabledata3 += '</tr>';
+
+                tabledata3 += '</tbody>'
+
+                table3.innerHTML = tabledata3;
+            }
+        });
+
+        return;
+    }
+
+
+    function approveExaminer(regno) {
+        var fd = new FormData();
+        fd.append("examiner", regno);
+        fetch('/examiner/approved', {
+            method: 'POST',
+            body: fd
+        }).then(function (response) {
+
+            //console.log(response);
+
+            return response.json();
+
+        }).then(function (data) {
+            console.log(data);
+            if (data.status == "success") {
+                alert("examiner approved!");
+                // document.getElementById('approveBtn'+regno).value="Approved";
+            }
+            else {
+                alert("Couldn't approve please try again!");
+            }
+        });
+    }
+
+</script>
+
+
+<body>
+    <div id="includedContent"></div>
+    <div class="container-fluid">
+        <div class="p-3 m-3">
+            <div class="p-3 m-3">
+                <div class="container">
+                    <!-- Container-->
+                    <div id='report_TextBoxesGroup' class='container bg-light p-3'>
+
+                        <div class="container">
+                            <h5 style="font-size:25px;font-weight:bold;" class="text-center pb-3 display-5">Approve
+                                Examiners</h5>
+
+                            <br>
+                            <table class="table" id="data-table1">
+
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+</body>
+
+</html>
